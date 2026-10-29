@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -6,5 +6,4 @@ class Settings(BaseSettings):
     debug: bool = False
     max_users: int = 100
 
-    class Config:
-        env_prefix = "DEMO_"
+    model_config = SettingsConfigDict(env_prefix="DEMO_")
