@@ -1,4 +1,4 @@
-from pydantic import BaseModel, root_validator, validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class SignupForm(BaseModel):
@@ -7,22 +7,23 @@ class SignupForm(BaseModel):
     password: str
     password_confirm: str
 
-    @validator("email")
+    @field_validator("email")
+    @classmethod
     def normalize_email(cls, value):
         if "@" not in value:
             raise ValueError("not an email address")
         return value.strip().lower()
 
-    @root_validator
-    def passwords_match(cls, values):
-        if values.get("password") != values.get("password_confirm"):
+    @model_validator(mode="after")
+    def passwords_match(self):
+        if self.password != self.password_confirm:
             raise ValueError("passwords do not match")
-        return values
+        return self
 
 
 def to_public_dict(form: SignupForm) -> dict:
-    return form.dict(exclude={"password", "password_confirm"})
+    return form.model_dump(exclude={"password", "password_confirm"})
 
 
 def parse_signup(data: dict) -> SignupForm:
-    return SignupForm.parse_obj(data)
+    return SignupForm.model_validate(data)
