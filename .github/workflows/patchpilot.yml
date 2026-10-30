@@ -1,0 +1,22 @@
+name: patchpilot
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # every Monday at 06:00 UTC
+  workflow_dispatch:      # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: patchpilot
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilmeedesilva/patchpilot@main
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
