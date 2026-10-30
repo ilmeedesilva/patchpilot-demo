@@ -16,7 +16,7 @@ jobs:
   upgrade:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ilmeedesilva/patchpilot@main
+      - uses: actions/checkout@v5
+      - uses: ilmeedesilva/patchpilot@v0.2.0
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
